@@ -1,0 +1,57 @@
+RETRIEVAL-BASED CHATBOTS
+Lesson Review
+Congratulations! You’ve learned to build your own retrieval-based chatbot, and have the tools necessary to develop a bot that can be used in any closed-domain. Let’s review what we’ve covered in this lesson:
+
+Retrieval-based chatbots are used in closed-domain scenarios and rely on a collection of predefined responses to a user message. A retrieval-based bot completes three main tasks: intent classification, entity recognition, and response selection.
+There are a number of ways to determine which response is the best fit for a given user message. One of the most important decisions a chatbot architect makes is the selection of a similarity metric.
+Bag-of-Words (BoW) models are commonly used to compute intent similarity measures based on word overlap.
+Term frequency–inverse document frequency (tf-idf) is another common similarity metric which incorporates the relative frequency of terms across the collection of possible responses. The sklearn package provides a TfidfVectorizer() object that we can use to fit tf-idf models. *Entity recognition tasks often extract proper nouns from a user message using Part of Speech (POS) tagging. POS tagging can be performed with nltk’s .pos_tag() method. *It’s often helpful to imagine pre-defined chatbot responses as a kind of MadLibs story. We can use word embeddings models, like the one implemented in the spacy package, to insert entities into response objects based on their cosine similarity with abstract, “blank-spot” concepts. *The final response selection relies on results from both intent classification and entity recognition tasks in order to produce a coherent response to the user message.
+Instructions
+The code in the workspace executes a chatbot system using the functions we have designed throughout this lesson –– but we’re missing a set of pre-defined responses with a shared “blank spot” category! Write your own set of responses to a possible user message. You can run the file from the terminal by entering python3 script.py in order to test the chatbot system and the coverage of your pre-defined responses.
+
+Can you imagine how many pre-defined messages a retrieval-based chatbot must have access to in order to complete the variety of applications they are used in today?
+
+from user_functions import preprocess, compare_overlap, pos_tag, extract_nouns, compute_similarity
+from collections import Counter
+import spacy
+word2vec = spacy.load('en')
+
+blank_spot = ""
+
+response_a = ""
+response_b = ""
+response_c = ""
+
+responses= [response_a, response_b, response_c]
+
+class ChatBot:
+    def find_intent_match(self, responses, user_message):
+        bow_user_message = Counter(preprocess(user_message))
+        processed_responses = [Counter(preprocess(response)) for response in responses]
+        similarity_list = [compare_overlap(doc, bow_user_message) for doc in processed_responses]
+        response_index = similarity_list.index(max(similarity_list))
+        return responses[response_index]
+
+    def find_entities(self, user_message):
+        tagged_user_message = pos_tag(preprocess(user_message))
+        message_nouns = extract_nouns(tagged_user_message)
+        
+        tokens = word2vec(" ".join(message_nouns))
+        category = word2vec(blank_spot)
+        word2vec_result = compute_similarity(tokens, category)
+        word2vec_result.sort(key=lambda x: x[2])
+        return word2vec_result[-1][0]
+
+    def respond(self,user_message):
+        best_response = self.find_intent_match(responses, user_message)
+        entity = self.find_entities(user_message)
+        print(best_response.format(entity))
+        print("I hope I was able to help. See ya around!")
+        return True
+    
+    def chat(self):
+        user_message = input("Hey! I'm a bot. Ask me your questions! ")
+        self.respond(user_message)
+
+ChatBot = ChatBot()
+ChatBot.chat()

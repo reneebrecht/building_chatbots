@@ -1,3 +1,7 @@
+This seq2seq machine translator is a stepping stone to creating a generative chatbot since generating dialog can also be accomplished with seq2seq. Rather than converting input in one language to output in another language, we can convert dialog input into a likely corresponding response.
+
+In fact, the only major difference between the code used for a machine translation program and a generative chatbot is the dataset we use to train our model.  
+
 # Set Up The Code
 Clone the Repo to your local machine. You should have following files:
 deu.txt

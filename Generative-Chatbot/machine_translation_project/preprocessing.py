@@ -3,7 +3,7 @@ import re
 
 # Importing our translations
 # for example: "spa.txt" or "spa-eng/spa.txt"
-data_path = "YOUR-FILE-NAME-HERE.txt"
+data_path = "deu-eng\deu.txt"
 
 # Defining lines as a list of each line
 with open(data_path, 'r', encoding='utf-8') as f:
@@ -18,7 +18,7 @@ target_tokens = set()
 
 # Adjust the number of lines so that
 # preprocessing doesn't take too long for you
-for line in lines[:501]:
+for line in lines[:10000]:
   # Input and target sentences are separated by tabs
   input_doc, target_doc = line.split('\t')[:2]
   # Appending each input sentence to input_docs
@@ -88,3 +88,6 @@ for line, (input_doc, target_doc) in enumerate(zip(input_docs, target_docs)):
       decoder_target_data[line, timestep - 1, target_features_dict[token]] = 1.
 
 # print out those value here:
+print(list(input_features_dict.keys())[:50])
+print(reverse_target_features_dict[50])
+print(len(input_tokens))

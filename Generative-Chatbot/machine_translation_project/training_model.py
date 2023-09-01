@@ -15,7 +15,7 @@ latent_dim = 256
 # Choose a batch size
 # and a larger number of epochs:
 batch_size = 50
-epochs = 50
+epochs = 100
 
 # Encoder training setup
 encoder_inputs = Input(shape=(None, num_encoder_tokens))
